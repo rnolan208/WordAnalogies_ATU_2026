@@ -119,10 +119,21 @@ public class Menu {
                 }
             }
 
-            System.out.println("Vector operation completed.");
+            AnalogyFinder finder = new AnalogyFinder();
+            var matches = finder.findClosestWords(embeddings, result, 10);
+
+            System.out.println("Top matches:");
+            for (SearchResult match : matches) {
+                System.out.println(match);
+            }
+            
+            ResultWriter writer = new ResultWriter();
+            writer.write(outputFilePath, matches);
 
         } catch (Exception e) {
-            System.out.println("Invalid input format.");
+            System.out.println(ConsoleColour.RED);
+            System.out.println("Error processing operation: " + e.getMessage());
+            System.out.println(ConsoleColour.RESET);
         }
     }
 
@@ -134,15 +145,25 @@ public class Menu {
     
     private void setOutputFile() {
         System.out.print("Enter output file path (leave blank for default): ");
-        String path = scanner.nextLine();
+        String path = scanner.nextLine().trim();
 
         if (path.isBlank()) {
             outputFilePath = "./out.txt";
-            System.out.println("Using default output file: " + outputFilePath);
         } else {
+            path = path.replace("\"", "");
+
+            // If no .txt file is specified then the program will assume it's a folder specified
+            if (!path.toLowerCase().endsWith(".txt")) {
+                if (!path.endsWith("\\") && !path.endsWith("/")) {
+                    path += "\\";
+                }
+                path += "out.txt";
+            }
+
             outputFilePath = path;
-            System.out.println("Output file set to: " + outputFilePath);
         }
+
+        System.out.println("Output file set to: " + outputFilePath);
     }
 
     

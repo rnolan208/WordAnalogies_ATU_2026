@@ -24,12 +24,12 @@ public class EmbeddingLoader {
                     continue;
                 }
 
-                String word = parts[0];
+                String word = parts[0].replace(",", "").toLowerCase();
                 double[] vector = new double[parts.length - 1];
 
                 for (int i = 1; i < parts.length; i++) {
-                	String value = parts[i].replace(",", "");
-                	vector[i - 1] = Double.parseDouble(value);
+                    String value = parts[i].replace(",", "");
+                    vector[i - 1] = Double.parseDouble(value);
                 }
 
                 embeddings.put(word, vector);
