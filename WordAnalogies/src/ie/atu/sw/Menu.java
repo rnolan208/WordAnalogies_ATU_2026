@@ -85,8 +85,45 @@ public class Menu {
         }
 
         System.out.print("Enter operation (e.g. king - man + woman): ");
-        String op = scanner.nextLine();
-        System.out.println("Operation: " + op);
+        String input = scanner.nextLine();
+
+        try {
+        	String[] parts = input.trim().split("\\s+");
+
+            double[] result = embeddings.get(parts[0]);
+            if (result == null) {
+                System.out.println("Word not found: " + parts[0]);
+                return;
+            }
+
+            for (int i = 1; i < parts.length; i += 2) {
+                String operator = parts[i];
+                String word = parts[i + 1];
+
+                double[] nextVector = embeddings.get(word);
+
+                if (nextVector == null) {
+                    System.out.println("Word not found: " + word);
+                    return;
+                }
+
+                if (operator.equals("+")) {
+                    result = VectorCalculator.add(result, nextVector);
+                } else if (operator.equals("-")) {
+                    result = VectorCalculator.subtract(result, nextVector);
+                }
+                
+                else {
+                    System.out.println("Unsupported operator: " + operator);
+                    return;
+                }
+            }
+
+            System.out.println("Vector operation completed.");
+
+        } catch (Exception e) {
+            System.out.println("Invalid input format.");
+        }
     }
 
     

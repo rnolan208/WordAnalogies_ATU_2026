@@ -2,13 +2,21 @@ package ie.atu.sw;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class EmbeddingLoader {
+
+	// To be part of AnalogyFinder
+	// Set<String>keys = emb.keySet();
+	// for (var K:keys){
+	//		double[] vec = emb.get(k):
+	// 		double val = cosine(vec, result);}
 	
+	
+	// Indexing the words of a book with a map exercise - check similarity
 	public Map<String, double[]> load(String filePath) throws Exception {
-        Map<String, double[]> embeddings = new HashMap<>();
+        Map<String, double[]> embeddings = new ConcurrentHashMap<>();
         
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
