@@ -6,13 +6,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class EmbeddingLoader {
-
-	// To be part of AnalogyFinder
-	// Set<String>keys = emb.keySet();
-	// for (var K:keys){
-	//		double[] vec = emb.get(k):
-	// 		double val = cosine(vec, result);}
-	
 	
 	// Indexing the words of a book with a map exercise - check similarity
 	public Map<String, double[]> load(String filePath) throws Exception {
