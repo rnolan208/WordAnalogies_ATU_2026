@@ -1,10 +1,14 @@
 package ie.atu.sw;
 
 import java.util.Scanner;
+import java.util.Map;
 
 public class Menu {
 	private Scanner scanner = new Scanner(System.in);
     private boolean running = true;
+    private String embeddingFilePath;
+    private Map<String, double[]> embeddings;
+    private String outputFilePath = "./out.txt";
     
     public void start() {
         while (running) {
@@ -27,13 +31,12 @@ public class Menu {
 		System.out.println("(1) Enter Path to Embeddings File>");
 		System.out.println("(2) Enter Vector Operation>");
 		System.out.println("(3) Configure Options");
-		System.out.println("(4) Specify Output File (default: ./out.txt)");
-		System.out.println("(?) Quit");
+		System.out.println("(4) Specify Output File (current: " + outputFilePath + ")");
+		System.out.println("(0) Quit");
 		
 		//Output a menu of options and solicit text from the user
 		System.out.print(ConsoleColour.BLACK_BOLD_BRIGHT);
 	    System.out.print("Select Option [1-4]> ");
-	    System.out.println();
 
 	    // Reset colour after
 	    System.out.print(ConsoleColour.RESET);
@@ -48,33 +51,64 @@ public class Menu {
             case "2" -> enterOperation();
             case "3" -> configureOptions();
             case "4" -> setOutputFile();
-            case "?" -> exit();
+            case "0" -> exit();
             default -> System.out.println("Invalid option.");
         }
     }
 
     private void setEmbeddingPath() {
-        System.out.print("Enter file path: ");
-        String path = scanner.nextLine();
-        System.out.println("Path set to: " + path);
+        System.out.print("Enter path to embeddings file: ");
+        embeddingFilePath = scanner.nextLine();
+
+        try {
+            EmbeddingLoader loader = new EmbeddingLoader();
+            embeddings = loader.load(embeddingFilePath);
+
+            System.out.println(ConsoleColour.GREEN);
+            System.out.println("Embeddings loaded successfully.");
+            System.out.println("Total words loaded: " + embeddings.size());
+            System.out.println(ConsoleColour.RESET);
+        } catch (Exception e) {
+            System.out.println(ConsoleColour.RED);
+            System.out.println("Error loading embeddings file: " + e.getMessage());
+            System.out.println(ConsoleColour.RESET);
+        }
     }
 
+    
     private void enterOperation() {
+        if (embeddings == null) {
+            System.out.println(ConsoleColour.RED);
+            System.out.println("Please load embeddings first (Option 1).");
+            System.out.println(ConsoleColour.RESET);
+            return;
+        }
+
         System.out.print("Enter operation (e.g. king - man + woman): ");
         String op = scanner.nextLine();
         System.out.println("Operation: " + op);
     }
 
+    
     private void configureOptions() {
         System.out.println("Options not implemented yet.");
     }
 
+    
     private void setOutputFile() {
-        System.out.print("Enter output file path: ");
+        System.out.print("Enter output file path (leave blank for default): ");
         String path = scanner.nextLine();
-        System.out.println("Output file set to: " + path);
+
+        if (path.isBlank()) {
+            outputFilePath = "./out.txt";
+            System.out.println("Using default output file: " + outputFilePath);
+        } else {
+            outputFilePath = path;
+            System.out.println("Output file set to: " + outputFilePath);
+        }
     }
 
+    
     private void exit() {
         System.out.println("Exiting...");
         running = false;
