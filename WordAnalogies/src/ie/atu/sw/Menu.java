@@ -9,6 +9,8 @@ public class Menu {
     private String embeddingFilePath;
     private Map<String, double[]> embeddings;
     private String outputFilePath = "./out.txt";
+    private int topN = 10;
+    private boolean useVirtualThreads = true;
     
     public void start() {
         while (running) {
@@ -120,15 +122,26 @@ public class Menu {
             }
 
             AnalogyFinder finder = new AnalogyFinder();
-            var matches = finder.findClosestWords(embeddings, result, 10);
 
-            System.out.println("Top matches:");
-            for (SearchResult match : matches) {
-                System.out.println(match);
-            }
-            
-            ResultWriter writer = new ResultWriter();
-            writer.write(outputFilePath, matches);
+	         // Start timing
+	         long start = System.currentTimeMillis();
+	
+	         var matches = finder.findClosestWords(embeddings, result, topN, useVirtualThreads);
+	
+	         // End timing
+	         long end = System.currentTimeMillis();
+	
+	         System.out.println("Search completed in " + (end - start) + " ms");
+	
+	         // Print results
+	         System.out.println("Top matches:");
+	         for (SearchResult match : matches) {
+	             System.out.println(match);
+	         }
+	
+	         // Write to file
+	         ResultWriter writer = new ResultWriter();
+	         writer.write(outputFilePath, matches, (end - start), topN, useVirtualThreads);
 
         } catch (Exception e) {
             System.out.println(ConsoleColour.RED);
