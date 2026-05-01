@@ -90,7 +90,7 @@ public class Menu {
         String input = scanner.nextLine();
 
         try {
-        	String[] parts = input.trim().split("\\s+");
+        	String[] parts = input.toLowerCase().trim().split("\\s+");
 
             double[] result = embeddings.get(parts[0]);
             if (result == null) {
@@ -152,7 +152,44 @@ public class Menu {
 
     
     private void configureOptions() {
-        System.out.println("Options not implemented yet.");
+        System.out.println(ConsoleColour.CYAN);
+        System.out.println("=== Configure Options ===");
+        System.out.println("Current Top N results: " + topN);
+        System.out.println("Using virtual threads: " + useVirtualThreads);
+        System.out.println(ConsoleColour.RESET);
+
+        System.out.print("Enter number of results to return, or press Enter to keep " + topN + ": ");
+        String n = scanner.nextLine().trim();
+
+        if (!n.isBlank()) {
+            try {
+                int value = Integer.parseInt(n);
+
+                if (value > 0) {
+                    topN = value;
+                    System.out.println("Top N updated to: " + topN);
+                } else {
+                    System.out.println("Top N must be greater than 0. Keeping current value.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number. Keeping current value: " + topN);
+            }
+        }
+
+        System.out.print("Use virtual threads? (y/n, or press Enter to keep current): ");
+        String choice = scanner.nextLine().trim();
+
+        if (choice.equalsIgnoreCase("y")) {
+            useVirtualThreads = true;
+            System.out.println("Virtual threads enabled.");
+        } else if (choice.equalsIgnoreCase("n")) {
+            useVirtualThreads = false;
+            System.out.println("Virtual threads disabled.");
+        } else if (!choice.isBlank()) {
+            System.out.println("Invalid choice. Keeping current value: " + useVirtualThreads);
+        }
+
+        System.out.println("Options updated.");
     }
 
     
@@ -165,7 +202,7 @@ public class Menu {
         } else {
             path = path.replace("\"", "");
 
-            // If no .txt file is specified then the program will assume it's a folder specified
+            // If no .txt file is specified then the program will assume it's a folder which is specified
             if (!path.toLowerCase().endsWith(".txt")) {
                 if (!path.endsWith("\\") && !path.endsWith("/")) {
                     path += "\\";
