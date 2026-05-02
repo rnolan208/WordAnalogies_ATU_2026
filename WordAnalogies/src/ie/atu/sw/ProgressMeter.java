@@ -2,6 +2,16 @@ package ie.atu.sw;
 
 public class ProgressMeter {
 	
+	/**
+     * Prints a progress meter bar in the terminal.
+     *
+     * @param index the current progress value
+     * @param total the total number of steps
+     *
+     * Time Complexity: O(1)
+     * Rationale: the progress meter bar has a fixed display size of 50 characters.
+     */
+	
 	public static void printProgress(int index, int total) {
 		if (index > total) return;	//Out of range
         int size = 50; 				//Must be less than console width

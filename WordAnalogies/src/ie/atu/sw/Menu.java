@@ -12,6 +12,14 @@ public class Menu {
     private int topN = 10;
     private boolean useVirtualThreads = true;
     
+    
+    /**
+     * Starts the menu and keeps the application running until the user selects exit.
+     *
+     * Time Complexity: O(k)
+     * Rationale: k is the number of menu interactions performed by the user.
+     */
+    
     public void start() {
         while (running) {
             displayMenu();
@@ -19,6 +27,13 @@ public class Menu {
         }
 }
 
+    
+    /**
+     * Displays the menu options to the user.
+     *
+     * Time Complexity: O(1)
+     * Rationale: prints the fixed number of menu items.
+     */
     
     private void displayMenu() {
     	
@@ -38,12 +53,19 @@ public class Menu {
 		
 		//Output a menu of options and solicit text from the user
 		System.out.print(ConsoleColour.BLACK_BOLD_BRIGHT);
-	    System.out.print("Select Option [1-4]> ");
+	    System.out.print("Select Option [0-4]> ");
 
 	    // Reset colour after
 	    System.out.print(ConsoleColour.RESET);
     }
 
+    
+    /**
+     * Reads and processes the user's menu choice(s).
+     *
+     * Time Complexity: O(1)
+     * Rationale: checks one input value against the fixed number of menu options.
+     */
     
     private void handleChoice() {
         String choice = scanner.nextLine();
@@ -58,6 +80,14 @@ public class Menu {
         }
     }
 
+    
+    /**
+     * Prompts the user for the embeddings file path and loads the embeddings.
+     *
+     * Time Complexity: O(n * d)
+     * Rationale: delegates to EmbeddingLoader, which reads n words with d vector values.
+     */
+    
     private void setEmbeddingPath() {
         System.out.print("Enter path to embeddings file: ");
         embeddingFilePath = scanner.nextLine();
@@ -78,6 +108,14 @@ public class Menu {
     }
 
     
+    /**
+     * Handles user input for vector operations and executes the search.
+     *
+     * Time Complexity: O(n * d + n log n)
+     * Rationale: vector arithmetic uses O(d), similarity compares n vectors of 
+     * dimension d, and sorting takes O(n log n).
+     */
+    
     private void enterOperation() {
         if (embeddings == null) {
             System.out.println(ConsoleColour.RED);
@@ -91,6 +129,11 @@ public class Menu {
 
         try {
         	String[] parts = input.toLowerCase().trim().split("\\s+");
+        	
+        	if (parts.length < 3 || parts.length % 2 == 0) {
+        	    System.out.println("Invalid format. Example: king - man + woman");
+        	    return;
+        	}
 
             double[] result = embeddings.get(parts[0]);
             if (result == null) {
@@ -151,6 +194,13 @@ public class Menu {
     }
 
     
+    /**
+     * Allows user to configure application settings.
+     *
+     * Time Complexity: O(1)
+     * Rationale: fixed number of inputs and assignments.
+     */
+    
     private void configureOptions() {
         System.out.println(ConsoleColour.CYAN);
         System.out.println("=== Configure Options ===");
@@ -191,7 +241,14 @@ public class Menu {
 
         System.out.println("Options updated.");
     }
-
+  
+    
+    /**
+     * Prompts the user to set their desired output file path.
+     *
+     * Time Complexity: O(1)
+     * Rationale: performs a fixed number of assignments.
+     */
     
     private void setOutputFile() {
         System.out.print("Enter output file path (leave blank for default): ");
@@ -216,6 +273,13 @@ public class Menu {
         System.out.println("Output file set to: " + outputFilePath);
     }
 
+    
+    /**
+     * Exits the application and stops the menu loop.
+     *
+     * Time Complexity: O(1)
+     * Rationale: updates one boolean flag.
+     */
     
     private void exit() {
         System.out.println("Exiting...");

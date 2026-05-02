@@ -7,7 +7,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class EmbeddingLoader {
 	
-	// Indexing the words of a book with a map exercise - check similarity
+	/**
+	 * Loads the word embeddings from an input file into the map.
+	 *
+	 * @param filePath is the path to the embeddings file
+	 * @return map of words to their correct vector representations
+	 * @throws Exception if an error occurs while reading the file
+	 *
+	 * Time Complexity: O(n * d)
+	 * Rationale: n = number of words, d = vector size.
+	 * Each line is read once and each value within the vector is parsed.
+	 */
+	
 	public Map<String, double[]> load(String filePath) throws Exception {
         Map<String, double[]> embeddings = new ConcurrentHashMap<>();
         

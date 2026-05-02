@@ -1,6 +1,18 @@
 package ie.atu.sw;
 
 public class SimilarityCalculator {
+	
+	/**
+	 * Computes the cosine similarity between the two vectors.
+	 *
+	 * @param a the first vector
+	 * @param b the second vector
+	 * @return similarity score
+	 * @throws IllegalArgumentException if the vectors have different lengths
+	 *
+	 * Time Complexity: O(d)
+	 * Rationale: requires one pass to compute dot product and magnitudes.
+	 */
 
     public static double cosine(double[] a, double[] b) {
         if (a.length != b.length) {

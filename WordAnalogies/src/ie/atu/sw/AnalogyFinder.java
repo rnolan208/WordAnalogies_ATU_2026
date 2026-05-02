@@ -8,6 +8,22 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 
 public class AnalogyFinder {
+	
+	/**
+	 * Finds the top N closest words to the given vector by using either sequential
+	 * processing or virtual threads.
+	 *
+	 * @param embeddings the map of words to vector embeddings
+	 * @param resultVector the computed vector from the analogy expression
+	 * @param topN the number of results to return
+	 * @param useVirtualThreads true to use virtual threads, false for sequential search
+	 * @return a list of the top matching words and their similarity scores
+	 * @throws Exception if the virtual thread executor fails
+	 *
+	 * Time Complexity: O(n log n)
+	 * Rationale: O(n * d) is required to compare all n word vectors of dimension d,
+	 * and O(n log n) is required to sort the results.
+	 */
 
     public List<SearchResult> findClosestWords(
             Map<String, double[]> embeddings,
@@ -22,6 +38,19 @@ public class AnalogyFinder {
             return findSequentially(embeddings, resultVector, topN);
         }
     }
+    
+    
+    /**
+     * Performs the similarity search sequentially.
+     * 
+     * @param embeddings the map of words to vector embeddings
+	 * @param resultVector the computed analogy vector
+	 * @param topN the number of results to return
+	 * @return a sorted list of the top matching results
+     *
+     * Time Complexity: O(n log n)
+     * Rationale: each word vector is compared once and then all results are sorted.
+     */
 
     // Sequential - one loop
     private List<SearchResult> findSequentially(
@@ -40,6 +69,21 @@ public class AnalogyFinder {
         Collections.sort(results);
         return results.subList(0, Math.min(topN, results.size()));
     }
+    
+    
+    /**
+     * Performs similarity search using virtual threads.
+     *
+     *@param embeddings the map of words to vector embeddings
+	 * @param resultVector the computed analogy vector
+	 * @param topN the number of results to return
+	 * @return a sorted list of the top matching results
+	 * @throws Exception if virtual thread execution fails
+	 * 
+     * Time Complexity: O(n log n)
+     * Rationale: similarity calculations are distributed across virtual threads,
+     * but the final sort still requires O(n log n).
+     */
 
     // Virtual threads - one thread per word
     private List<SearchResult> findWithVirtualThreads(
